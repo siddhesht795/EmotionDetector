@@ -1,7 +1,8 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
+from tensorflow.keras.callbacks import EarlyStopping
 
 train_dir = "../train"
 test_dir = "../test"
@@ -49,16 +50,24 @@ print(train_generator.class_indices)
 model = Sequential()
 
 model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(48, 48, 1)))
-model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
 model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
 model.add(Conv2D(128, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
 model.add(Conv2D(256, (3, 3), activation='relu'))
+model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
 model.add(Flatten())
 
@@ -73,16 +82,18 @@ model.compile(
     metrics=['accuracy']
 )
 
-loss, accuracy = model.evaluate(test_generator)
-print("Test Loss:", loss)
-print("Test Accuracy:", accuracy)
+early_stop = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
 
 history = model.fit(
     train_generator,
     steps_per_epoch=train_generator.samples // train_generator.batch_size,
-    epochs=40,
+    epochs=50,
     validation_data=test_generator,
     validation_steps=test_generator.samples // test_generator.batch_size
 )
+
+loss, accuracy = model.evaluate(test_generator)
+print("Test Loss:", loss)
+print("Test Accuracy:", accuracy)
 
 model.save('emotion_model.h5')

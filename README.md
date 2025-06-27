@@ -101,10 +101,15 @@ Classification Report(emotion_model.h5):
 
 ```
 emotion_project/
-├── train_model.py
-├── emotion_model.h5
-├── best_emotion_model.h5
 ├── images/
-│   └── confusion_matrix.png
-└── README.md
+│   ├── EmoModel_ConfusionMatrix.jpg
+│   └── EmoModel_ClassificationReport.jpg
+├── models/
+│   ├── emotion_model.h5
+│   └── best_emotion_model.h5
+├── augment_disgust.py
+├── evaluate_model.py
+├── predict_emotion.py
+├── README.md
+└── train_model.py
 ```

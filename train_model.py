@@ -10,12 +10,11 @@ from sklearn.metrics import confusion_matrix, classification_report
 from collections import Counter
 import os
 
-# Paths
 train_dir = "../train"
 test_dir = "../test"
 image_size = (48, 48)
 
-# Image Generators with tuned augmentation
+# Image Generators with augmentation
 train_datagen = ImageDataGenerator(
     rescale=1./255,
     rotation_range=15,
@@ -45,7 +44,7 @@ test_generator = test_datagen.flow_from_directory(
     shuffle=False
 )
 
-# Class distribution and computed weights
+# computing weights
 class_counts = Counter(train_generator.classes)
 total = sum(class_counts.values())
 class_weights = {i: total / (7 * class_counts[i]) for i in class_counts}
@@ -107,16 +106,13 @@ history = model.fit(
     class_weight=class_weights
 )
 
-# Load the best saved model
 model = tf.keras.models.load_model("best_emotion_model.h5")
 
-# Evaluation
 true_labels = test_generator.classes
 predictions = model.predict(test_generator, verbose=1)
 predicted_labels = np.argmax(predictions, axis=1)
 class_labels = list(train_generator.class_indices.keys())
 
-# Confusion matrix
 cm = confusion_matrix(true_labels, predicted_labels)
 plt.figure(figsize=(10, 8))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_labels, yticklabels=class_labels)
@@ -126,15 +122,12 @@ plt.title('Confusion Matrix')
 plt.tight_layout()
 plt.show()
 
-# Classification report
 print(classification_report(true_labels, predicted_labels, target_names=class_labels))
 
-# Final metrics
 results = model.evaluate(test_generator)
 print(f"Test Loss: {results[0]:.4f}")
 print(f"Test Accuracy: {results[1]:.4f}")
 print(f"Test Precision: {results[2]:.4f}")
 print(f"Test Recall: {results[3]:.4f}")
 
-# Save the final model again
 model.save('emotion_model.h5')

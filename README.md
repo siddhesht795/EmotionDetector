@@ -79,9 +79,13 @@ The script generates:
 
 ## 📷 Results Visualization
 
-Confusion matrix heatmap:
+Confusion matrix heatmap(emotion_model.h5):
 
-![Confusion Matrix Placeholder](images/confusion_matrix.png)
+![Confusion Matrix](images/EmoModel_ConfusionMatrix.png)
+
+Classification Report(emotion_model.h5):
+
+![Classification Report](images/EmoModel_ClassificationReport.png)
 
 ---
 

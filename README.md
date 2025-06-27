@@ -81,11 +81,11 @@ The script generates:
 
 Confusion matrix heatmap(emotion_model.h5):
 
-![Confusion Matrix](images/EmoModel_ConfusionMatrix.png)
+![Confusion Matrix](images/EmoModel_ConfusionMatrix.jpg)
 
 Classification Report(emotion_model.h5):
 
-![Classification Report](images/EmoModel_ClassificationReport.png)
+![Classification Report](images/EmoModel_ClassificationReport.jpg)
 
 ---
 
